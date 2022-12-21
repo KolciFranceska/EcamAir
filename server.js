@@ -27,12 +27,25 @@ connection.connect(function (error) { if (error) console.log(error);});
 
 //Send reservation for default URL
 app.get('/', (req, res) => {
-    connection.query('select * from ecamair;', function (error, result) {
+    connection.query('select * from reservation;', function (error, result) {
         if (error) console.log(error);
         res.render('home.ejs', {ecamair : result});
     });
 });
 
+//Save user in db
+app.post('/', (req, res) => {
+    let reservation ={"destination":req.body.destination, "nbseat":req.body.nbseat};
+    connection.query('insert into reservation set ?', reservation, function (err, result) {
+        if (err) console.log(err);
+        res.redirect('/');
+    });
+});
+
+//Send reservation for person URL
+app.get('/persons', (req, res) => {
+    res.render('person.ejs');
+});
 
 
 let router = require('./routes.js')
