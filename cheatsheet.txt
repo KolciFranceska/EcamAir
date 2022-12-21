@@ -1,0 +1,132 @@
+
+
+
+-----------------------Repo Git
+
+créer un répo git avec un .gitignore pour le module node
+cloner le répo git ou vous le voulez localement
+
+copier coller le contenu du fichier prepa_exam_TW
+
+installer les packages qui suivent
+
+-----------------------Serveur
+
+packages:
+
+	npm install node
+	npm install express
+
+	npm init
+
+	npm install express-session
+	npm install ejs
+	npm install mysql
+	npm install nodemon
+	
+	modifier le fichier package.json pour que nodemon soit lancé avec la commande npm run dev
+	
+	"scripts": {
+		"dev": "nodemon server.js"
+	},
+
+npm run dev // pour lancer le serveur en mode dev (plus besoin de refresh pour voir les changements)
+
+// créez votre site puis ajoutez les modifs à git
+
+-----------------------Linux
+
+//Si ce n'est pas déjà fait, installer mysql et gérer les droits à l'aide de la commande suivante:
+
+	sudo mysql_secure_installation
+
+	//Si vous voulez changer le mdp de l'utilisateur root:
+
+	sudo mysql -u root
+
+	//puis vous pouvez créer un mot de passe pour l'utilisateur root
+
+	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+
+	//Créer un utilisateur et un mot de passe pour la base de données
+
+	sudo mysql -u root
+
+	CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+
+	//créer la base de données
+
+	CREATE DATABASE <nom de la base de données>;
+
+	//donner les droits à l'utilisateur
+
+	GRANT ALL PRIVILEGES ON * . * TO 'user'@'localhost';
+
+//si vous voulez pouvoir modifier les données de la base de données à partir de l'extérieur, modifier le fichier de configuration de mysql
+
+	sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+	//dans le fichier de configuration, modifier la ligne suivante:
+
+	bind-address            = 0.0.0.0
+
+	//redémarrer le service mysql
+	sudo service mysql restart
+
+//cloner le repo git
+
+sudo mkdir <nom du dossier>
+git clone <lien du git>
+
+//si on vous demande de rentrer un mdp pour le repo git, il faudra aller générer un token dans les settings de votre compte github et l'utiliser à la place du mdp
+
+
+
+//si packages pas installés utiliser: apt install <nom du package>
+
+	sudo npm install <nom du package> // les mêmes que pour le serveur
+
+//avant de lancer le site, n'oubliez pas de modifier le fichier database.js avec les bonnes informations de connexion à la base de données
+
+//lancer le site
+sudo npm run dev
+
+----------------------Backup base de donnée sur linux
+
+//créer un script de backup et de log
+
+	sudo touch /var/backup/backup.sh
+	sudo nano /var/backup/backup.sh
+
+	//créer un fichier de log
+
+		sudo touch /var/backup/backup.log
+
+	//modifier le script de backup
+
+		#!/bin/bash
+
+		mysqldump -u user -p'password' <database name> > /var/backup/<nom de la bdd>$(date +"%d-%m-%Y").sql
+
+		echo "Backup de la base de données effectué le $(date +"%d-%m-%Y") à $(date +"%T")" >> /var/backup/backup.log
+
+	//rendre le script exécutable
+
+		sudo chmod +x /var/backup/backup.sh
+
+//configurer le cron pour lancer le script de backup 
+
+	sudo crontab -e // pour éditer le fichier de cron
+
+	//ajouter la ligne suivante pour faire un backup de la base de donnée toutes les nuits à 4h du matin
+
+	0 4 * * * /var/backup/backup.sh
+
+
+//si vous voulez faire un backup d'un dossier, créez un script de backup et de log:
+
+	#!/bin/bash
+
+	tar -zcvf /var/backup/<nom du dossier>$(date +"%d-%m-%Y").tar.gz /var/backup/<nom du dossier>.tar
+
+	echo "Backup du dossier effectué le $(date +"%d-%m-%Y") à $(date +"%T")" >> /var/backup/backup.log
+
