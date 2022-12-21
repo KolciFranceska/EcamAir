@@ -5,7 +5,7 @@ let router = express.Router()
 let modelController = require('./controllers/modelController');
 
 //router.get('/', <nom_variable_du controlleur>.<nom de la fonction du controlleur>)
-router.get('/', modelController.reservationList);
+router.get('/', modelController.newSeat);
+router.get('/persons', modelController.newPerson);
 
-
-module.exports = router
+module.exports = router;
