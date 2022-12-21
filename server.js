@@ -27,7 +27,7 @@ connection.connect(function (error) { if (error) console.log(error);});
 
 //Send reservation for default URL
 app.get('/', (req, res) => {
-    connection.query('select * from reservation;', function (error, result) {
+    connection.query('select * from ecamair.reservation;', function (error, result) {
         if (error) console.log(error);
         res.render('home.ejs', {ecamair : result});
     });
@@ -41,7 +41,7 @@ app.get('/persons', (req, res) => {
 //Save user in db
 app.post('/', (req, res) => {
     let reservation ={"destination":req.body.destination, "nbseat":req.body.nbseat, "name":req.body.name, "age":req.body.age};
-    connection.query('insert into reservation set ?', reservation, function (err, result) {
+    connection.query('insert into ecamair.reservation set ?', reservation, function (err, result) {
         if (err) console.log(err);
         res.redirect('/');
     });
@@ -55,7 +55,7 @@ app.get('/validation', (req, res) => {
 //Save user in db
 app.post('/persons', (req, res) => {
     let person ={"destination":req.body.destination, "nbseat":req.body.nbseat, "name":req.body.name, "age":req.body.age};
-    connection.query('insert into reservation set ?', person, function (err, result) {
+    connection.query('insert into ecamair.reservation set ?', person, function (err, result) {
         if (err) console.log(err);
         res.redirect('/persons');
     });
@@ -68,7 +68,7 @@ app.get('/confirmation', (req, res) => {
 
 //Send list of users
 app.get('/validation', (req, res) => {
-    connection.query('select * from reservation;', function (error, result) {
+    connection.query('select * from ecamair.reservation;', function (error, result) {
         if (error) console.log(error);
         res.render('validation.ejs', {reservation : result});
     });
